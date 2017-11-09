@@ -22,11 +22,11 @@ public:
 	int parent(int);
 	int left(int);
 	int right(int);
-	int extractMin();
+	void insertKey(int);
 	void decreaseKey(int , int);
 	int getMin();
+	int extractMin();
 	void deleteKey(int);
-	void insertKey(int);
 };
 
 MinHeap::MinHeap(int cap){
@@ -50,14 +50,14 @@ int MinHeap::right(int i){
 
 void MinHeap::minHeapify(int i){
 	int smallest = i;
-	int l = left(i);
-	int r = right(i);
+	int l = MinHeap::left(i);
+	int r = MinHeap::right(i);
 
-	if(l < heapsize && arr[l] < arr[smallest]){
+	if(l < heapsize && harr[l] < harr[smallest]){
 		smallest = l;
 	}
 
-	if(r < heapsize && arr[r] < arr[smallest]){
+	if(r < heapsize && harr[r] < harr[smallest]){
 		smallest = r;
 	}
 
@@ -67,6 +67,67 @@ void MinHeap::minHeapify(int i){
 	}
 }
 
+void MinHeap::insertKey(int k){
+	if(heapsize == capacity){
+		cout << "Heap is Full, can not insert any more." << endl;
+		return;
+	}
+
+	heapsize++;
+	int i = heapsize - 1;
+	harr[i] = k;
+
+	while(i != 0 && harr[MinHeap::parent(i)] > harr[i]){
+		swap(&harr[MinHeap::parent(i)] , &harr[i]);
+		i = parent(i);
+	}
+}
+
+void MinHeap::decreaseKey(int i , int new_val){
+	harr[i] = new_val;
+	while(i != 0 && harr[MinHeap::parent(i)] > harr[i]){
+		swap(&harr[MinHeap::parent(i)] , &harr[i]);
+		i = MinHeap::parent(i);
+	}
+}
+
+int MinHeap::getMin(){
+	return harr[0];
+}
+
+int MinHeap::extractMin(){
+	if(heapsize <= 0){
+		return INT_MAX;
+	}
+	if(heapsize == 1){
+		heapsize--;
+		return harr[0];
+	}
+
+	int root = harr[0];
+	harr[0] = harr[heapsize - 1];
+	heapsize--;
+	MinHeap::minHeapify(0);
+	return root;
+}
+
+void MinHeap::deleteKey(int i){
+	MinHeap::decreaseKey(i , INT_MIN);
+	MinHeap::extractMin();
+}
+
 int main(){
+	MinHeap h(11);
+	h.insertKey(3);
+	h.insertKey(2);
+	h.deleteKey(1);
+	h.insertKey(15);
+	h.insertKey(5);
+	h.insertKey(4);
+	h.insertKey(45);
+	cout << h.extractMin() << " ";
+	cout << h.getMin() << " ";
+	h.decreaseKey(2, 1);
+	cout << h.getMin();
 	return 0;
 }
