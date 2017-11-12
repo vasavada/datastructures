@@ -13,8 +13,8 @@ void swap(int* x , int* y){
 
 class MinHeap{
 	int* harr;
-	int capacity;
 	int heapsize;
+	int capacity;
 
 public:
 	MinHeap(int);
