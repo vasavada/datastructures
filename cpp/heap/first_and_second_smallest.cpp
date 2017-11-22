@@ -17,7 +17,7 @@ vector<int> firstSecondSmallest(vector<int> arr){
 	for(int i = 0 ; i < arr.size() ; i++){
 		if(arr[i] < first){
 			second = first;
-			first = arr[i];
+			first  = arr[i];
 		}else if(arr[i] < second && arr[i] != first){
 			second = arr[i];
 		}
